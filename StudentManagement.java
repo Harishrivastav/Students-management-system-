@@ -1,125 +1,87 @@
-import java.lang.Error;
 import java.util.*;
 
-interface StudentService {
-    void performService();
+public class StudentManagementSystem {
+
+    private static Student[] students = new Student[100];  // Initial capacity of 100 students
+    private static int studentCount = 0;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
+
+        do {
+            System.out.println("\nStudent Management System");
+            System.out.println("1. Add Student");
+            System.out.println("2. Display Students");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline left-over
+
+            switch (choice) {
+                case 1:
+                    addStudent(scanner);
+                    break;
+                case 2:
+                    displayStudents();
+                    break;
+                case 3:
+                    System.out.println("Exiting the system...");
+                    break;
+                default:
+                    System.out.println("Invalid choice!");
+            }
+        } while (choice != 3);
+
+        scanner.close();
+    }
+
+    private static void addStudent(Scanner scanner) {
+        if (studentCount >= students.length) {
+            System.out.println("Student list is full!");
+            return;
+        }
+
+        System.out.print("Enter student name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter student roll number: ");
+        int rollNumber = scanner.nextInt();
+        scanner.nextLine();  // Consume newline left-over
+
+        Student student = new Student(name, rollNumber);
+        students[studentCount++] = student;
+        System.out.println("Student added successfully!");
+    }
+
+    private static void displayStudents() {
+        if (studentCount == 0) {
+            System.out.println("No students found!");
+        } else {
+            System.out.println("\nStudent List:");
+            for (int i = 0; i < studentCount; i++) {
+                Student student = students[i];
+                System.out.println("Name: " + student.getName() + ", Roll Number: " + student.getRollNumber());
+            }
+        }
+    }
 }
 
 class Student {
-    private String rollNumber;
     private String name;
-    private String branch;
+    private int rollNumber;
 
-    public Student(String rollNumber, String name, String branch) {
-        this.rollNumber = rollNumber;
+    public Student(String name, int rollNumber) {
         this.name = name;
-        this.branch = branch;
-    }
-
-    public String getRollNumber() {
-        return rollNumber;
+        this.rollNumber = rollNumber;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getBranch() {
-        return branch;
-    }
-
-    public void displayInfo() {
-        System.out.println("Roll Number: " + rollNumber);
-        System.out.println("Name: " + name);
-        System.out.println("Branch: " + branch);
+    public int getRollNumber() {
+        return rollNumber;
     }
 }
 
-class UploadMarksService implements StudentService {
-    private Student student;
-    private int marks;
-
-    public UploadMarksService(Student student, int marks) {
-        this.student = student;
-        this.marks = marks;
-    }
-
-    @Override
-    public void performService() {
-        System.out.println("Uploading marks for student:");
-        student.displayInfo();
-        System.out.println("Marks: " + marks);
-    }
-}
-
-class UploadSyllabusService implements StudentService {
-    private Student student;
-    private String syllabus;
-
-    public UploadSyllabusService(Student student, String syllabus) {
-        this.student = student;
-        this.syllabus = syllabus;
-    }
-
-    @Override
-    public void performService() {
-        System.out.println("Uploading syllabus for student:");
-        student.displayInfo();
-        System.out.println("Syllabus: " + syllabus);
-    }
-}
-
-class UploadNotesService implements StudentService {
-    private Student student;
-    private String notes;
-
-    public UploadNotesService(Student student, String notes) {
-        this.student = student;
-        this.notes = notes;
-    }
-
-    @Override
-    public void performService() {
-        System.out.println("Uploading notes for student:");
-        student.displayInfo();
-        System.out.println("Notes: " + notes);
-    }
-}
-
-class UploadScheduleService implements StudentService {
-    private Student student;
-    private String schedule;
-
-    public UploadScheduleService(Student student, String schedule) {
-        this.student = student;
-        this.schedule = schedule;
-    }
-
-    @Override
-    public void performService() {
-        System.out.println("Uploading schedule for student:");
-        student.displayInfo();
-        System.out.println("Schedule: " + schedule);
-    }
-}
-
-public class StudentManagement {
-
-    public static void main(String[] args) {
-        Student student1 = new Student("101", "Alice", "CSE");
-        Student student2 = new Student("102", "Bob", "ECE");
-
-        StudentService uploadMarksService = new UploadMarksService(student1, 85);
-        uploadMarksService.performService();
-
-        StudentService uploadSyllabusService = new UploadSyllabusService(student2, "ECE Syllabus 2024");
-        uploadSyllabusService.performService();
-
-        StudentService uploadNotesService = new UploadNotesService(student1, "CSE Notes");
-        uploadNotesService.performService();
-
-        StudentService uploadScheduleService = new UploadScheduleService(student2, "ECE Class Schedule");
-        uploadScheduleService.performService();
-    }
-}
 
